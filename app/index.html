@@ -2,12 +2,20 @@
 
 <html>
 
-<head>
-	<link rel="stylesheet" type="text/css" href="css/styles.css">
-</head>
+	<head>
+		<!--build:css css/styles.min.css-->
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+		<link rel="stylesheet" type="text/css" href="css/another-stylesheet.css">
+		<!--endbuild-->
+	</head>
 
-<body>
+	<body>
 	
-</body>
+		<!-- build:js js/main.min.js-->
+		<script src="js/lib/a-library.js"></script>
+		<script src="js/lib/another-library.js"></script>
+		<script src="js/lib/main.js"></script>
+		<!-- endbuild -->
+	</body>
 
 </html>
