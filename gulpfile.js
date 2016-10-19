@@ -26,6 +26,16 @@ var header = require('gulp-header');
 
 var rename = require('gulp-rename');
 
+var revAll = require('gulp-rev-all');
+ 
+gulp.task('rev-all', function () {
+  return gulp
+    .src('dist/**')
+    .pipe(revAll.revision({dontRenameFile: ['index.html'] }))	
+    .pipe(gulp.dest('cdn'));
+ 
+});
+
 var banner = ['/*!\n',
     ' * Start Bootstrap - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
     ' * Copyright 2013-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
@@ -55,10 +65,8 @@ gulp.task('browserSync', function() {
 gulp.task('useref', function() {
 	return gulp.src('app/*.html')
 		.pipe(useref(pkg.version))
-		.pipe(gulpIf('*.js', uglify()))
-		.pipe(gulpIf('*.js', rename({ suffix: '.' + pkg.version })))
-		.pipe(gulpIf('*.css', cssnano()))
-		.pipe(gulpIf('*.css',rename({ suffix: '.' + pkg.version })))
+		.pipe(gulpIf('*.js', uglify()))		
+		.pipe(gulpIf('*.css', cssnano()))		
 		.pipe(gulp.dest('dist'));
 });
 
