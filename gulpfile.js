@@ -20,9 +20,24 @@ var del = require('del');
 
 var runSequence = require('run-sequence');
 
+var pkg = require('./package.json');
+
+var header = require('gulp-header');
+
+var rename = require('gulp-rename');
+
+var banner = ['/*!\n',
+    ' * Start Bootstrap - <%= pkg.title %> v<%= pkg.version %> (<%= pkg.homepage %>)\n',
+    ' * Copyright 2013-' + (new Date()).getFullYear(), ' <%= pkg.author %>\n',
+    ' * Licensed under <%= pkg.license.type %> (<%= pkg.license.url %>)\n',
+    ' */\n',
+    ''
+].join('');
+
 gulp.task('sass', function() {
 	return gulp.src('app/scss/**/*.scss')
 		.pipe(sass())
+		.pipe(header(banner, { pkg: pkg }))
 		.pipe(gulp.dest('app/css'))
 		.pipe(browserSync.reload({
 			stream: true
@@ -39,9 +54,11 @@ gulp.task('browserSync', function() {
 
 gulp.task('useref', function() {
 	return gulp.src('app/*.html')
-		.pipe(useref())
+		.pipe(useref(pkg.version))
 		.pipe(gulpIf('*.js', uglify()))
+		.pipe(gulpIf('*.js', rename({ suffix: '.' + pkg.version })))
 		.pipe(gulpIf('*.css', cssnano()))
+		.pipe(gulpIf('*.css',rename({ suffix: '.' + pkg.version })))
 		.pipe(gulp.dest('dist'));
 });
 
